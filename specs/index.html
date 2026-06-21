@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>ColaVM Specification</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Specification for the Cola Virtual Machine">
+        <meta name="keywords" content="Cola, VM, stack, based, virtual, machine, systems, Sanyam, Asthana">
+        <meta name="author" content="Sanyam Asthana">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "ColaVM Specification",
+          "url": "https://colavm.vercel.app/specs",
+          "description": "Specification for the Cola Virtual Machine"
+        }
+        </script>
+
+        <style>
+            body {
+                margin-inline: auto;
+                max-width: 75ch;
+                padding-inline: 1.25rem;
+                line-height: 1.45;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            }
+
+            code {
+                background-color: lightgrey;
+                padding: 4px;
+                white-space: pre-wrap;
+            }
+        </style>
+
+        <link rel="icon" href="../logo.png" type="image/png">
+    </head>
+    <body>
+        <main>
+            <section style="display: flex; flex-direction: column; align-items: center;">
+                <h1>ColaVM Specification</h1>
+            </section>
+
+            <hr>
+
+            <nav style="display: flex; flex-direction: row; justify-content: center; gap: 1rem;">
+                <a href="../index.html">Home</a>
+                <a href="../docs/index.html">Docs</a>
+                <a href="index.html">Specification</a>
+                <a href="https://github.com/Sanyam-Asthana/ColaVM-Suite">GitHub</a>
+            </nav>
+
+            <hr>
+
+            <section>
+                <h2>Architecture</h2>
+
+                <p>The component controlling each of the other components' operations is the Control Unit (CU).</p>
+
+                <p>The core of the ColaVM is a stack (ST), on which all the operations are performed. Each element of the ST is a 32-bit integer.</p>
+
+                <p>It also consists of a Variable Array (VA), in which variables can be stored for later use. The VA can hold 256 32-bit integers.</p>
+
+                <p>The execution is done via a Program Counter (PC). The PC points at the instruction which is being executed. The PC model allows for easy change-of-flow of execution during jumps.</p>
+
+                <p>The last component is the Instruction Memory (IM). The IM holds all the instructions of the program, and is the memory whose elements PC points to.</p>
+
+                <img src="flow.svg" width="80%">
+            </section>
+
+            <section>
+                <h2>Instruction Set</h2>
+
+                <p>The instructions are all variable-sized. Variable-sized instructions allow for compact and dense compiled binaries.</p>
+
+                <p>Every operation has both an 8-bit and a 32-bit counterpart. This greatly optimizes the binary size for operations with small arguments.</p>
+
+                <p>There are special OpCodes for pushing common constants 0-9 on the stack. This reduces the expense of pushing these common constants from 2 bits to 1 bit of required intruction memory, further reducing the binary size. This idea is borrowed from the Java Virtual Machine.</p>
+
+                <p>OpCodes for incrementing and decrementing reduce the overhead of adding and subtracting 1, reducing the instruction bit count from 2 to 1.</p>
+
+                <p>It is to be noted that the programmer writing the source code will not explicitly write separate variants for the 8-bit and the 32-bit instructions, nor the explicit PushConst(0-9) instructions. The programmer will write <b>generic</b> instructions like "PRINT", "PUSH", "JUMP" and the assembler will resolve them into the respctive variant.</p>
+
+                <h3>OpCodes</h3>
+
+                <p>
+                    Each instruction operates on the stack unless stated otherwise.
+                    Values are 32-bit signed integers. Instructions with an argument
+                    store that argument immediately after the opcode.
+                </p>
+
+                <ul>
+                    <li><code>PUSH8 &lt;value&gt;</code> - Pushes an 8-bit signed integer onto the stack.</li>
+                    <li><code>PUSH32 &lt;value&gt;</code> - Pushes a 32-bit signed integer onto the stack.</li>
+
+                    <li><code>POP</code> - Removes the top value from the stack.</li>
+                    <li><code>TOP</code> - Prints the current top stack value. Does not modify the stack.</li>
+
+                    <li><code>ADD</code> - Pops the top two values, adds them, and pushes the result.</li>
+                    <li><code>SUB</code> - Pops the top two values, subtracts the top value from the next value, and pushes the result.</li>
+                    <li><code>MUL</code> - Pops the top two values, multiplies them, and pushes the result.</li>
+                    <li><code>DIV</code> - Pops the top two values, divides the second value by the top value, and pushes the result.</li>
+                    <li><code>MOD</code> - Pops the top two values, calculates the remainder when second value is divided by the top value, and pushes the result.</li>
+
+                    <li><code>CHAR &lt;length&gt;</code> - Pops <code>length</code> values and prints them as characters.</li>
+                    <li><code>PRINT8 &lt;length&gt;</code> - Prints <code>length</code> subsequent hardcoded bytes (max 256 bytes) from the instruction stream. Does not use the stack.</li>
+                    <li><code>PRINT32 &lt;length&gt;</code> - Prints <code>length</code> subsequent hardcoded bytes (max 4294967296 bytes) from the instruction stream. Does not use the stack.</li>
+
+                    <li><code>JUMP8 &lt;address&gt;</code> - Sets the program counter to the given 8-bit instruction address.</li>
+                    <li><code>JUMP32 &lt;address&gt;</code> - Sets the program counter to the given 32-bit instruction address.</li>
+
+                    <li><code>JEZ8 &lt;address&gt;</code> - Pops one value. Jumps if the value is zero.</li>
+                    <li><code>JEZ32 &lt;address&gt;</code> - Pops one value. Jumps if the value is zero.</li>
+
+                    <li><code>JEQ8 &lt;address&gt;</code> - Pops two values. Jumps if they are equal.</li>
+                    <li><code>JEQ32 &lt;address&gt;</code> - Pops two values. Jumps if they are equal.</li>
+
+                    <li><code>JGT8 &lt;address&gt;</code> - Pops two values. Jumps if the second value is greater than the first.</li>
+                    <li><code>JGT32 &lt;address&gt;</code> - Pops two values. Jumps if the second value is greater than the first.</li>
+
+                    <li><code>JLT8 &lt;address&gt;</code> - Pops two values. Jumps if the second value is less than the first.</li>
+                    <li><code>JLT32 &lt;address&gt;</code> - Pops two values. Jumps if the second value is less than the first.</li>
+
+                    <li><code>JGE8 &lt;address&gt;</code> - Pops two values. Jumps if the second value is greater than or equal to the first.</li>
+                    <li><code>JGE32 &lt;address&gt;</code> - Pops two values. Jumps if the second value is greater than or equal to the first.</li>
+
+                    <li><code>JLE8 &lt;address&gt;</code> - Pops two values. Jumps if the second value is less than or equal to the first.</li>
+                    <li><code>JLE32 &lt;address&gt;</code> - Pops two values. Jumps if the second value is less than or equal to the first.</li>
+
+                    <li><code>STORE &lt;index&gt;</code> - Pops one value and stores it in the Variable Array at the given index.</li>
+                    <li><code>LOAD &lt;index&gt;</code> - Pushes the value stored in the Variable Array at the given index.</li>
+
+                    <li><code>PUSHCONST0 ... PUSHCONST9</code> - Pushes the constants 0 through 9 onto the stack.</li>
+
+                    <li><code>INC</code> - Pops one value, increments it, and pushes the result.</li>
+                    <li><code>DEC</code> - Pops one value, decrements it, and pushes the result.</li>
+
+                    <li><code>END</code> - Stops execution. Does not modify the stack.</li>
+                </ul>
+
+                <h3>Instruction Arguments</h3>
+
+                <ul>
+                    <li>Values after <code>PUSH8</code>, <code>PUSH32</code>, and jump instructions are literal data.</li>
+                    <li>Jump addresses refer to instruction memory positions (the program counter value).</li>
+                    <li><code>PRINT8</code> and <code>PRINT32</code> lengths refer to bytes stored directly in the instruction stream after the opcode.</li>
+                    <li><code>STORE</code> and <code>LOAD</code> arguments refer to Variable Array indices (0-255).</li>
+                    <li>Arithmetic and comparison instructions take their operands from the stack and have no encoded arguments.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Assembler</h2>
+
+                <p>The ColaVM assembler is called <b>Fill</b>.</p>
+
+                <p>The assembler goes through the source code twice.</p>
+
+                <p>During the first pass, the assembler collects all the labels and resolves them to instruction addresses. It also resolves each generic instruction ("PRINT", "PUSH", "JUMP") to the respective 8-bit or 32-bit variant.</p>
+
+                <p>During the second pass, the assembler packs each resolved instruction into the binary.</p>
+            </section>
+        </main>
+    </body>
+</html>

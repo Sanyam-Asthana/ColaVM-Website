@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>ColaVM Suite</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="A stack-based virtual machine ecosystem aimed at compiling compact binaries">
+        <meta name="keywords" content="Cola, VM, stack, based, virtual, machine, systems, Sanyam, Asthana">
+        <meta name="author" content="Sanyam Asthana">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "ColaVM Suite",
+          "url": "https://colavm.vercel.app",
+          "description": "A stack-based virtual machine ecosystem aimed at compiling compact binaries"
+        }
+        </script>
+
+        <style>
+            body {
+                margin-inline: auto;
+                max-width: 75ch;
+                padding-inline: 1.25rem;
+                line-height: 1.45;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            }
+
+            code {
+                background-color: lightgrey;
+                padding: 4px;
+                white-space: pre-wrap;
+            }
+        </style>
+
+        <link rel="icon" href="logo.png" type="image/png">
+    </head>
+    <body>
+        <main>
+            <section style="display: flex; flex-direction: column; align-items: center;">
+                <img src="logo.png" width="25%">
+                <h2>A stack-based virtual machine ecosystem</h2>
+            </section>
+
+            <hr>
+
+            <nav style="display: flex; flex-direction: row; justify-content: center; gap: 1rem;">
+                <a href="index.html">Home</a>
+                <a href="docs/index.html">Docs</a>
+                <a href="specs/index.html">Specification</a>
+                <a href="https://github.com/Sanyam-Asthana/ColaVM-Suite">GitHub</a>
+            </nav>
+
+            <hr>
+
+            <section>
+                <h2>Introduction</h2>
+
+                <p><b>ColaVM</b> suite is a lightweight stack-based virtual machine ecosystem with a custom ISA which aims to compile and run compact-sized binaries.</p>
+
+                <p>ColaVM is inspired by the Java Virtual Machine (JVM) and is written in Rust.</p>
+            </section>
+
+            <section>
+                <h2>Examples</h2>
+
+                <section>
+                    <h3>Hello World</h3>
+
+                    <p>This simple program prints "Hello, World!".</p>
+
+                    <p><code>PRINT "Hello, World!"</code></p>
+
+                    <p>The output <b>can</b> (compiled binary) is 15 bytes in size.</p>
+                </section>
+
+                <section>
+                    <h3>FizzBuzz</h3>
+
+                    <p>A classic FizzBuzz program (prints "Fizz" on a multiple of 3, "Buzz" on a multiple of 5 and "FizzBuzz" on a multiple of 15)</p>
+
+                    <p>View code <a href="fizzbuzz.cola">here</a>!</p>
+
+                    <p>The output <b>can</b> (compiled binary) is 85 bytes in size.</p>
+                </section>
+            </section>
+        </main>
+    </body>
+</html>

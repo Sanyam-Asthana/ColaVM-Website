@@ -1,0 +1,142 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>ColaVM Documentation</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Documentation for the Cola Virtual Machine">
+        <meta name="keywords" content="Cola, VM, stack, based, virtual, machine, systems, Sanyam, Asthana">
+        <meta name="author" content="Sanyam Asthana">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "ColaVM Specification",
+          "url": "https://colavm.vercel.app/specs",
+          "description": "Documentation for the Cola Virtual Machine"
+        }
+        </script>
+
+        <style>
+            body {
+                margin-inline: auto;
+                max-width: 75ch;
+                padding-inline: 1.25rem;
+                line-height: 1.45;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            }
+
+            code {
+                background-color: lightgrey;
+                padding: 4px;
+                white-space: pre-wrap;
+            }
+        </style>
+
+        <link rel="icon" href="../logo.png" type="image/png">
+    </head>
+    <body>
+        <main>
+            <section style="display: flex; flex-direction: column; align-items: center;">
+                <h1>ColaVM Documentation</h1>
+            </section>
+
+            <hr>
+
+            <nav style="display: flex; flex-direction: row; justify-content: center; gap: 1rem;">
+                <a href="../index.html">Home</a>
+                <a href="index.html">Docs</a>
+                <a href="../specs/index.html">Specification</a>
+                <a href="https://github.com/Sanyam-Asthana/ColaVM-Suite">GitHub</a>
+            </nav>
+
+            <hr>
+
+            <section>
+
+                <h2>Instructions</h2>
+
+                <p>
+                    Cola programs are written using stack-based instructions.
+                    Most instructions consume values from the stack (pop them)
+                    and may push a result back.
+                </p>
+
+                <ul>
+                    <li><code>PUSH &lt;value&gt;</code> - Pushes a value onto the stack.</li>
+                    <li><code>POP</code> - Removes the top value from the stack.</li>
+                    <li><code>TOP</code> - Reads and prints the top value without removing it.</li>
+
+                    <li><code>ADD</code> - Pops two values, adds them, and pushes the result.</li>
+                    <li><code>SUB</code> - Pops two values, subtracts the top value from the next, and pushes the result.</li>
+                    <li><code>MUL</code> - Pops two values, multiplies them, and pushes the result.</li>
+                    <li><code>DIV</code> - Pops two values, divides the second by the first, and pushes the result.</li>
+                    <li><code>MOD</code> - Pops two values, calculates the remainder, and pushes the result.</li>
+
+                    <li><code>PRINT "text"</code> - Prints a string stored inside the instruction.</li>
+                    <li><code>CHAR &lt;length&gt;</code> - Pops <code>length</code> values and prints them as characters.</li>
+
+                    <li><code>STORE &lt;index&gt;</code> - Pops the top value and stores it in a variable.</li>
+                    <li><code>LOAD &lt;index&gt;</code> - Pushes the stored variable value onto the stack.</li>
+
+                    <li><code>INC</code> - Pops the top value, increments it, and pushes the result.</li>
+                    <li><code>DEC</code> - Pops the top value, decrements it, and pushes the result.</li>
+
+                    <li><code>JUMP &lt;label&gt;</code> - Moves the PC to the label.</li>
+                    <li><code>JEZ &lt;label&gt;</code> - Pops one value. Jumps if it is zero.</li>
+                    <li><code>JEQ &lt;label&gt;</code> - Pops two values. Jumps if they are equal.</li>
+                    <li><code>JGT &lt;label&gt;</code> - Pops two values. Jumps if the second value is greater.</li>
+                    <li><code>JLT &lt;label&gt;</code> - Pops two values. Jumps if the second value is smaller.</li>
+                    <li><code>JGE &lt;label&gt;</code> - Pops two values. Jumps if the second value is greater or equal.</li>
+                    <li><code>JLE &lt;label&gt;</code> - Pops two values. Jumps if the second value is smaller or equal.</li>
+
+                    <li><code>END</code> - Stops program execution.</li>
+                </ul>
+
+                <h3>Stack Behaviour</h3>
+
+                <p>
+                    Instructions that perform calculations remove their operands from
+                    the stack first. The most recently pushed value is always popped first.
+                </p>
+
+                <p>
+                    Example:
+                </p>
+
+                <code>PUSH 10
+PUSH 5
+SUB
+TOP</code>
+
+                <p>
+                    After <code>SUB</code>, the stack contains <code>5</code> because it
+                    computes <code>10 - 5</code>. Both values were removed before the
+                    result was pushed back.
+                </p>
+
+            </section>
+
+            <section>
+                <h2>Writing and running a program</h2>
+
+                <p>Following are the steps to successfully write and run a Cola program.</p>
+
+                <ol>
+                    <li>Create a file named "program.cola".</li>
+                    
+                    <li>Write the desired code for the ColaVM. <br> For this example, let's assume a single line: <code>PRINT "Hello, World!"</code></li>
+
+                    <li>Run <code>python assemble.py path/to/program.cola</code> or <code>python3 assemble.py path/to/program.cola</code> depending on your platform.</li>
+
+                    <li>The compiled .can file (cola binary) will be created at the same directory as the source .cola file.</li>
+
+                    <li>Run <code>./colavm program.can</code> to run the binary.</li>
+
+                </ol>
+            </section>
+
+        </main>
+    </body>
+</html>
