@@ -78,7 +78,7 @@
 
                 <p>There are special OpCodes for pushing common constants 0-9 on the stack. This reduces the expense of pushing these common constants from 2 bytes to 1 byte of required intruction memory, further reducing the binary size. This idea is borrowed from the Java Virtual Machine.</p>
 
-                <p>OpCodes for incrementing and decrementing reduce the overhead of adding and subtracting 1, reducing the instruction bit count from 2 to 1.</p>
+                <p>OpCodes for incrementing and decrementing reduce the overhead of adding and subtracting 1, reducing the instruction byte count from 2 to 1.</p>
 
                 <p>It is to be noted that the programmer writing the source code will not explicitly write separate variants for the 8-bit and the 32-bit instructions, nor the explicit PushConst(0-9) instructions. The programmer will write <b>generic</b> instructions like "PRINT", "PUSH", "JUMP" and the assembler will resolve them into the respctive variant.</p>
 
